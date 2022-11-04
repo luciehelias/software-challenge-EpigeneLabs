@@ -12,7 +12,7 @@ Welcome to Epigene Labs' Engineering Challenge. The goal of this challenge is to
 1. Clone the repo (don't fork it) and create your own repo with the code;
 2. Select the track you prefer (🐍 is more backend oriented, 🌈 is more frontend oriented), or feel more confortable with;
 3. Resolve issues one by one of the selected track only (try to have the clearest commit history as possible)
-4. Once you are done, send an email to leonard@epigenelabs.com, we will organize a meeting afterward.
+4. Once you are done, send an email to benjamin@epigenelabs.com, we will organize a meeting afterward.
 
 ⚠️ We don't expect you to spend more than 1 to 4 hours in that challenge, and don't expect you to finish the challenge as well.
 
