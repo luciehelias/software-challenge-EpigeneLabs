@@ -30,40 +30,28 @@ The API allows the user to create a Geneset, create some Genes, and add genes to
 
 The following should be run under `/backend` folder.
 
-### 1 - Install python
+### 1 - Install uv
 
-Install `python 3.8` with [pyenv](https://github.com/pyenv/pyenv)
+Install [uv](https://docs.astral.sh/uv/) and python through uv. For uv installation refer to the [official documentation](https://docs.astral.sh/uv/getting-started/installation/). Then install python with the following command:
 
 ```
-brew install pyenv
-pyenv install 3.8.0
-pyenv local 3.8.0
+uv python install 3.12
 ```
 
-Copy/paste at the following command at the end of your `.zshrc` or `.bash_rc`
+### 2 - Install project dependencies
 
-```bash
-eval "$(pyenv init -)"
+Run the following command to create a virtual environment and install the dependencies required for the project:
+
 ```
-### 2 - Install poetry
-
-We need to install [poetry](https://python-poetry.org/docs/#installation) to manage python dependencies.
-
-You can make sure poetry is correctly installed by running 
-
-````
-poetry --version
-````
-
-Then, install dependencies `poetry install`.
-
+uv sync
+```
 
 ### 3 - Launch
 
 
-````
-poetry run uvicorn main:app --reload
-````
+```
+uv run uvicorn main:app --reload
+```
 
 You should now have an API running locally on port `8000`. The documentation of that API should be available at `localhost:8000/docs`
 
@@ -101,7 +89,7 @@ Make sure it works as expected.
 
 Now, we have thousands of users. 
 
-Run `poetry run python populate.py` to populate the database and simulate the number of users. 
+Run `uv run python populate.py` to populate the database and simulate the number of users. 
 
 Let's check again the endpoint that allow a user to retrieves the full list of genesets. The output doesn't look good, and it's getting slower right ? 
 

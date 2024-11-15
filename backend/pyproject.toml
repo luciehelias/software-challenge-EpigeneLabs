@@ -1,17 +1,12 @@
-[tool.poetry]
+[project]
 name = "software-challenge"
-version = "0.1.0"
-description = "Epigene challenge"
-authors = ["Leonard Sellam <leonard@epigenelabs.com>"]
-
-[tool.poetry.dependencies]
-python = "^3.8"
-fastapi = "^0.65.2"
-uvicorn = "^0.14.0"
-SQLAlchemy = "^1.4.18"
-
-[tool.poetry.dev-dependencies]
-
-[build-system]
-requires = ["poetry-core>=1.0.0"]
-build-backend = "poetry.core.masonry.api"
+version = "0.2.0"
+description = "Add your description here"
+readme = "README.md"
+requires-python = ">=3.12"
+authors = ["Marine Charnet <marine@epigenelabs.com>", "Antoine Gaston <antoine@epigenelabs.com>"]
+dependencies = [
+    "fastapi>=0.115.5",
+    "sqlalchemy>=2.0.36",
+    "uvicorn>=0.32.0",
+]
