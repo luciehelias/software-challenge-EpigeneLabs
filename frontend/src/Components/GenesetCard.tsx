@@ -1,13 +1,4 @@
-type Gene = {
-  id: number;
-  name: string;
-};
-
-type Geneset = {
-  id: number;
-  title: string;
-  genes: Gene[];
-};
+import { Geneset } from "../Types/global.types";
 
 type GenesetCardProps = {
   geneset: Geneset;
