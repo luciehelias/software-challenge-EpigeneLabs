@@ -1,39 +1,40 @@
 import axios from "axios";
-import { useEffect, useState } from "react";
+import { useCallback, useEffect, useState } from "react";
 import GenesetCard from "./Components/GenesetCard";
-
-type Gene = {
-  id: number;
-  name: string;
-};
-
-type Geneset = {
-  id: number;
-  title: string;
-  genes: Gene[];
-};
-
-type GenesetList = Geneset[];
+import GenesetModal from "./Components/GenesetModal";
+import { GenesetList, newGeneset } from "./Types/global.types";
 
 const App = () => {
   const [genesets, setGenesets] = useState<GenesetList>([]);
   const [loading, setLoading] = useState(true);
+  const [showModal, setShowModal] = useState(false);
 
-  useEffect(() => {
-    const fetchGenesets = async () => {
-      try {
-        const response = await axios.get("/genesets");
-        setGenesets(response.data);
-      } catch (error) {
-        console.error("Error fetching genesets:", error);
-      }
-    };
-    setLoading(false);
-    fetchGenesets();
+  // use UseCallback to memorize the function
+  const fetchGenesets = useCallback(async () => {
+    try {
+      const response = await axios.get("/genesets");
+      setGenesets(response.data);
+    } catch (error) {
+      console.error("Error fetching genesets:", error);
+    }
   }, []);
 
+  // use useEffect to get all the genesets
+  useEffect(() => {
+    fetchGenesets();
+    setLoading(false);
+  }, [fetchGenesets]);
+
+  const handleCreateGeneset = async (newGeneset: newGeneset) => {
+    try {
+      await axios.post("/genesets", newGeneset);
+      fetchGenesets();
+    } catch (error) {
+      console.error("Error creating geneset:", error);
+    }
+  };
+
   if (loading) {
-    0;
     return (
       <div>
         <p className="text-center text-lg text-gray-500">
@@ -48,6 +49,12 @@ const App = () => {
       <h1 className="text-6xl font-bold text-center mb-10 text-indigo-700">
         Genesets List
       </h1>
+      <button
+        onClick={() => setShowModal(true)}
+        className="bg-teal-700 text-white py-2 px-4 rounded-lg mb-8 text-xl"
+      >
+        Create a new geneset
+      </button>
       <div>
         {genesets.length > 0 ? (
           <ul className="grid grid-cols-1 lg:grid-cols-3 gap-10 ">
@@ -61,6 +68,11 @@ const App = () => {
           </p>
         )}
       </div>
+      <GenesetModal
+        showModal={showModal}
+        setShowModal={setShowModal}
+        handleCreateGeneset={handleCreateGeneset}
+      />
     </div>
   );
 };
