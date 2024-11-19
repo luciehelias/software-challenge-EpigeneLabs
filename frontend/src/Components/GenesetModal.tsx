@@ -1,6 +1,8 @@
 import { useEffect, useState } from "react";
-import { FaCirclePlus } from "react-icons/fa6";
+
 import { newGeneset } from "../Types/global.types";
+import AddGeneButton from "./AddGeneButton";
+import ActionButton from "./ActionButton";
 
 type GenesetModalProps = {
   showModal: boolean;
@@ -104,7 +106,6 @@ const GenesetModal = ({
                 className="w-full p-2 border border-gray-300 rounded-lg"
               />
             </div>
-
             <div className="mb-4">
               <label className="block text-sm font-semibold mb-2">Genes</label>
               {newGeneset.genes.map((gene, index) => (
@@ -118,28 +119,20 @@ const GenesetModal = ({
                   />
                 </div>
               ))}
-              <button
-                onClick={addGene}
-                className=" text-m flex items-center gap-2 my-4"
-              >
-                <FaCirclePlus className="text-xl" />
-                Add Another Gene
-              </button>
+              <AddGeneButton onClick={addGene} text="Add Another Gene" />
             </div>
             {error && <p className="text-red-700 text-center">{error}</p>}
-            <div className="flex justify-between mt-10">
-              <button
-                onClick={handleSubmit}
-                className="bg-violet-700 text-white py-2 px-4 rounded-lg"
-              >
-                Create a new geneset
-              </button>
-              <button
+            <div className="flex justify-between">
+              <ActionButton
+                text="Cancel"
+                variant="cancel"
                 onClick={handleClear}
-                className="bg-gray-800 text-white py-2 px-4 rounded-lg"
-              >
-                Cancel
-              </button>
+              />
+              <ActionButton
+                text="Create a new geneset"
+                variant="submit"
+                onClick={handleSubmit}
+              />
             </div>
           </div>
         </div>

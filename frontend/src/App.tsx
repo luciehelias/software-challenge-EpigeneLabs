@@ -3,6 +3,7 @@ import { useCallback, useEffect, useState } from "react";
 import GenesetCard from "./Components/GenesetCard";
 import GenesetModal from "./Components/GenesetModal";
 import { GenesetList, newGeneset } from "./Types/global.types";
+import ActionButton from "./Components/ActionButton";
 
 const App = () => {
   const [genesets, setGenesets] = useState<GenesetList>([]);
@@ -49,12 +50,11 @@ const App = () => {
       <h1 className="text-6xl font-bold text-center mb-10 text-indigo-700">
         Genesets List
       </h1>
-      <button
+      <ActionButton
+        text="Create a new geneset"
+        variant="showModal"
         onClick={() => setShowModal(true)}
-        className="bg-teal-700 text-white py-2 px-4 rounded-lg mb-8 text-xl"
-      >
-        Create a new geneset
-      </button>
+      />
       <div>
         {genesets.length > 0 ? (
           <ul className="grid grid-cols-1 lg:grid-cols-3 gap-10 ">
