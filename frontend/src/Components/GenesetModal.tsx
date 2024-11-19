@@ -1,46 +1,53 @@
 import { useEffect, useState } from "react";
 
-import { newGeneset } from "../Types/global.types";
+import { Geneset, newGeneset } from "../Types/global.types";
 import AddGeneButton from "./AddGeneButton";
 import ActionButton from "./ActionButton";
 
 type GenesetModalProps = {
   showModal: boolean;
   setShowModal: (show: boolean) => void;
-  handleCreateGeneset: (newGeneset: newGeneset) => Promise<void>;
+  handleModalAction: (newGeneset: newGeneset) => Promise<void>;
+  fetchGenesets: () => void;
+  genesetToEdit?: Geneset;
 };
 
 const GenesetModal = ({
   showModal,
   setShowModal,
-  handleCreateGeneset,
+  handleModalAction,
+  genesetToEdit,
+  fetchGenesets,
 }: GenesetModalProps) => {
   const [error, setError] = useState<string>("");
-  const initialState = {
-    title: "",
-    genes: [{ name: "" }], // start with an emty gene
+
+  //start with all the information inside the geneset or with empty gene for creation
+  const initialState: newGeneset = {
+    title: genesetToEdit ? genesetToEdit.title : "",
+    genes: genesetToEdit
+      ? genesetToEdit.genes.map((gene) => ({ name: gene.name }))
+      : [{ name: "" }],
   };
 
-  const [newGeneset, setNewGeneset] = useState<newGeneset>(initialState);
+  const [currentGeneset, setCurrentGeneset] =
+    useState<newGeneset>(initialState);
 
   useEffect(() => {
-    if (error) {
-      setError("");
-    }
-  }, [newGeneset]);
+    setCurrentGeneset(initialState);
+  }, [genesetToEdit]);
 
   // Add a gene to the list
   const addGene = () => {
-    setNewGeneset((prevState) => ({
+    setCurrentGeneset((prevState) => ({
       ...prevState,
       genes: [...prevState.genes, { name: "" }], // add new input to write a new gene
     }));
   };
 
   const handleGeneChange = (index: number, value: string) => {
-    const updatedGenes = [...newGeneset.genes];
+    const updatedGenes = [...currentGeneset.genes];
     updatedGenes[index] = { name: value };
-    setNewGeneset((prevState) => ({
+    setCurrentGeneset((prevState) => ({
       ...prevState,
       genes: updatedGenes,
     }));
@@ -49,12 +56,12 @@ const GenesetModal = ({
   const handleClear = () => {
     setShowModal(false);
     setError("");
-    setNewGeneset(initialState);
+    setCurrentGeneset(initialState);
   };
 
-  const handleSubmit = () => {
+  const handleSubmit = async () => {
     // filter empty genes and delete them to have only validGenes with string
-    const validGenes = newGeneset.genes.filter(
+    const validGenes = currentGeneset.genes.filter(
       (gene) => gene.name.trim() !== ""
     );
 
@@ -74,22 +81,25 @@ const GenesetModal = ({
       return;
     }
 
-    const genesetToSubmit = {
-      ...newGeneset,
-      genes: validGenes,
-    };
+    const genesetToSubmit = { ...currentGeneset, genes: validGenes };
 
-    handleCreateGeneset(genesetToSubmit);
-    handleClear();
+    try {
+      await handleModalAction(genesetToSubmit);
+      handleClear(); // Close the modal and reset state
+      fetchGenesets(); // Reload the page after a successful update
+    } catch (error) {
+      console.error("Error updating geneset:", error);
+      setError("An error occurred while updating the geneset.");
+    }
   };
 
   return (
     <>
       {showModal && (
         <div className="fixed inset-0 bg-gray-700 bg-opacity-60 flex justify-center items-center ">
-          <div className="bg-white p-8 rounded-lg shadow-lg w-auto">
+          <div className="bg-white p-8 rounded-lg shadow-lg w-full md:w-1/2 lg:w-1/3">
             <h2 className="text-3xl text-center text-violet-700 mb-6 ">
-              Create a new geneset
+              {genesetToEdit ? "Update Geneset" : "Create a new geneset"}
             </h2>
             <div className="mb-4">
               <label className="block text-sm font-semibold mb-2">
@@ -98,9 +108,12 @@ const GenesetModal = ({
               <input
                 type="text"
                 id="title"
-                value={newGeneset.title}
+                value={currentGeneset.title}
                 onChange={(e) =>
-                  setNewGeneset({ ...newGeneset, title: e.target.value })
+                  setCurrentGeneset({
+                    ...currentGeneset,
+                    title: e.target.value,
+                  })
                 }
                 placeholder="Title of the geneset"
                 className="w-full p-2 border border-gray-300 rounded-lg"
@@ -108,7 +121,7 @@ const GenesetModal = ({
             </div>
             <div className="mb-4">
               <label className="block text-sm font-semibold mb-2">Genes</label>
-              {newGeneset.genes.map((gene, index) => (
+              {currentGeneset.genes.map((gene, index) => (
                 <div key={index} className="flex items-center mb-2">
                   <input
                     type="text"
@@ -122,14 +135,14 @@ const GenesetModal = ({
               <AddGeneButton onClick={addGene} text="Add Another Gene" />
             </div>
             {error && <p className="text-red-700 text-center">{error}</p>}
-            <div className="flex justify-between">
+            <div className="flex justify-between gap-2">
               <ActionButton
                 text="Cancel"
                 variant="cancel"
                 onClick={handleClear}
               />
               <ActionButton
-                text="Create a new geneset"
+                text={genesetToEdit ? "Update geneset" : "Create geneset"}
                 variant="submit"
                 onClick={handleSubmit}
               />

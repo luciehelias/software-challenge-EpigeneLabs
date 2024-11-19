@@ -26,6 +26,7 @@ const App = () => {
     setLoading(false);
   }, [fetchGenesets]);
 
+  // post a new geneset in the API
   const handleCreateGeneset = async (newGeneset: newGeneset) => {
     try {
       await axios.post("/genesets", newGeneset);
@@ -59,7 +60,11 @@ const App = () => {
         {genesets.length > 0 ? (
           <ul className="grid grid-cols-1 lg:grid-cols-3 gap-10 ">
             {genesets.map((geneset, index) => (
-              <GenesetCard geneset={geneset} key={index} />
+              <GenesetCard
+                geneset={geneset}
+                key={index}
+                fetchGenesets={fetchGenesets}
+              />
             ))}
           </ul>
         ) : (
@@ -71,7 +76,8 @@ const App = () => {
       <GenesetModal
         showModal={showModal}
         setShowModal={setShowModal}
-        handleCreateGeneset={handleCreateGeneset}
+        handleModalAction={handleCreateGeneset}
+        fetchGenesets={fetchGenesets}
       />
     </div>
   );

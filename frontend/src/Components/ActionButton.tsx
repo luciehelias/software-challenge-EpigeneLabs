@@ -1,6 +1,6 @@
 type ActionButtonProps = {
   text: string;
-  variant: "submit" | "cancel" | "showModal";
+  variant: "submit" | "cancel" | "showModal" | "update";
   onClick: () => void;
 };
 
@@ -10,10 +10,10 @@ const ActionButton = ({ text, variant, onClick }: ActionButtonProps) => {
   let buttonVariantClass;
   if (variant === "submit") {
     buttonVariantClass = "bg-violet-700";
-  } else if (variant === "cancel") {
-    buttonVariantClass = "bg-gray-800";
   } else if (variant === "showModal") {
     buttonVariantClass = "bg-teal-700 mb-8 text-xl";
+  } else if (variant === "cancel" || variant === "update") {
+    buttonVariantClass = "bg-gray-800";
   }
 
   return (

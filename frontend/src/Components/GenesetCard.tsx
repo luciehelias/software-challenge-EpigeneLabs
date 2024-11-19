@@ -1,10 +1,39 @@
-import { Geneset } from "../Types/global.types";
+import { useState } from "react";
+import { Geneset, newGeneset } from "../Types/global.types";
+import axios from "axios";
+import ActionButton from "./ActionButton";
+import GenesetModal from "./GenesetModal";
 
 type GenesetCardProps = {
   geneset: Geneset;
+  fetchGenesets: () => void;
 };
 
-const GenesetCard = ({ geneset }: GenesetCardProps) => {
+const GenesetCard = ({ geneset, fetchGenesets }: GenesetCardProps) => {
+  const [genesetToEdit, setGenesetToEdit] = useState<Geneset>();
+  console.log(genesetToEdit);
+  const [showModal, setShowModal] = useState(false);
+
+  // get one specific geneset by its ID
+  const fetchGenesetById = async (genesetId: number) => {
+    try {
+      const response = await axios.get(`/genesets/${genesetId}`);
+      setGenesetToEdit(response.data);
+    } catch (error) {
+      console.error("Error fetching geneset by id:", error);
+    }
+  };
+
+  const handleModifyGeneset = async (newGeneset: newGeneset) => {
+    if (genesetToEdit) {
+      try {
+        await axios.put(`/genesets/${genesetToEdit.id}`, newGeneset);
+      } catch (error) {
+        console.error("Error fetching geneset by id:", error);
+      }
+    }
+  };
+
   return (
     <li
       key={geneset.id}
@@ -23,6 +52,25 @@ const GenesetCard = ({ geneset }: GenesetCardProps) => {
           </li>
         ))}
       </ul>
+      <div className="text-right">
+        <ActionButton
+          text="Edit"
+          variant="update"
+          onClick={() => {
+            fetchGenesetById(geneset.id);
+            setShowModal(true);
+          }}
+        />
+      </div>
+      {genesetToEdit && (
+        <GenesetModal
+          showModal={showModal}
+          setShowModal={setShowModal}
+          handleModalAction={handleModifyGeneset}
+          genesetToEdit={genesetToEdit}
+          fetchGenesets={fetchGenesets}
+        />
+      )}
     </li>
   );
 };
