@@ -62,6 +62,7 @@ const App = () => {
                 geneset={geneset}
                 key={index}
                 fetchGenesets={fetchGenesets}
+                genesets={genesets}
               />
             ))}
           </ul>
@@ -76,6 +77,7 @@ const App = () => {
         setShowModal={setShowModal}
         handleModalAction={handleCreateGeneset}
         fetchGenesets={fetchGenesets}
+        genesets={genesets}
       />
     </div>
   );

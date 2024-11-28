@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { Geneset, newGeneset } from "../Types/global.types";
+import { Geneset, GenesetList, newGeneset } from "../Types/global.types";
 import axios from "axios";
 import ActionButton from "./ActionButton";
 import GenesetModal from "./GenesetModal";
@@ -7,9 +7,14 @@ import GenesetModal from "./GenesetModal";
 type GenesetCardProps = {
   geneset: Geneset;
   fetchGenesets: () => void;
+  genesets: GenesetList;
 };
 
-const GenesetCard = ({ geneset, fetchGenesets }: GenesetCardProps) => {
+const GenesetCard = ({
+  geneset,
+  fetchGenesets,
+  genesets,
+}: GenesetCardProps) => {
   const [genesetToEdit, setGenesetToEdit] = useState<Geneset>();
   const [showModal, setShowModal] = useState(false);
 
@@ -38,7 +43,7 @@ const GenesetCard = ({ geneset, fetchGenesets }: GenesetCardProps) => {
       key={geneset.id}
       className="bg-violet p-4 rounded-lg shadow-md hover:shadow-lg transition duration-300"
     >
-      <h2 className="text-3xl text-center font-semibold mb-6 text-light-blue">
+      <h2 className="text-2xl font-medium text-center mb-6 text-light-blue ">
         {geneset.title}
       </h2>
       <ul className="grid grid-cols-2 gap-4">
@@ -68,6 +73,7 @@ const GenesetCard = ({ geneset, fetchGenesets }: GenesetCardProps) => {
           handleModalAction={handleModifyGeneset}
           genesetToEdit={genesetToEdit}
           fetchGenesets={fetchGenesets}
+          genesets={genesets}
         />
       )}
     </li>

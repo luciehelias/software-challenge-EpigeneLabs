@@ -1,6 +1,6 @@
 import { useEffect, useState } from "react";
 
-import { Geneset, newGeneset } from "../Types/global.types";
+import { Geneset, GenesetList, newGeneset } from "../Types/global.types";
 import AddGeneButton from "./AddGeneButton";
 import ActionButton from "./ActionButton";
 
@@ -9,6 +9,7 @@ type GenesetModalProps = {
   setShowModal: (show: boolean) => void;
   handleModalAction: (newGeneset: newGeneset) => Promise<void>;
   fetchGenesets: () => void;
+  genesets: GenesetList;
   genesetToEdit?: Geneset;
 };
 
@@ -18,6 +19,7 @@ const GenesetModal = ({
   handleModalAction,
   genesetToEdit,
   fetchGenesets,
+  genesets,
 }: GenesetModalProps) => {
   const [error, setError] = useState<string>("");
 
@@ -61,14 +63,29 @@ const GenesetModal = ({
   };
 
   const handleSubmit = async () => {
-    // filter empty genes and delete them to have only validGenes with string
-    const validGenes = currentGeneset.genes.filter(
-      (gene) => gene.name.trim() !== ""
-    );
+    // filter empty genes and delete them to have only validGenes with string and convert gene in UpperCase
+    const validGenes = currentGeneset.genes
+      .filter((gene) => gene.name.trim() !== "")
+      .map((gene) => ({ ...gene, name: gene.name.trim().toUpperCase() }));
 
     if (validGenes.length === 0) {
       setError("Please enter at least one valid gene.");
       return;
+    }
+
+    if (currentGeneset.title.length === 0) {
+      setError("Please enter a title for the geneset.");
+      return;
+    }
+
+    const titleUpperCase = currentGeneset.title.trim().toUpperCase();
+    const uniqueTitles = genesets.map((gene) => gene.title.toUpperCase());
+
+    if (!genesetToEdit) {
+      if (uniqueTitles.includes(titleUpperCase)) {
+        setError("The geneset already exists");
+        return;
+      }
     }
 
     // search if some genes are identical
@@ -82,7 +99,11 @@ const GenesetModal = ({
       return;
     }
 
-    const genesetToSubmit = { ...currentGeneset, genes: validGenes };
+    const genesetToSubmit = {
+      ...currentGeneset,
+      title: titleUpperCase,
+      genes: validGenes,
+    };
 
     try {
       await handleModalAction(genesetToSubmit);
@@ -135,7 +156,11 @@ const GenesetModal = ({
               ))}
               <AddGeneButton onClick={addGene} text="Add Another Gene" />
             </div>
-            {error && <p className="text-red-700 text-center">{error}</p>}
+            {error && (
+              <p className="text-red-700 text-center font-semibold mb-2">
+                {error}
+              </p>
+            )}
             <div className="flex justify-between gap-2">
               <ActionButton
                 text="Cancel"
