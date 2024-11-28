@@ -8,12 +8,14 @@ type GenesetCardProps = {
   geneset: Geneset;
   fetchGenesets: () => void;
   genesets: GenesetList;
+  setApiError: React.Dispatch<React.SetStateAction<string>>;
 };
 
 const GenesetCard = ({
   geneset,
   fetchGenesets,
   genesets,
+  setApiError,
 }: GenesetCardProps) => {
   const [genesetToEdit, setGenesetToEdit] = useState<Geneset>();
   const [showModal, setShowModal] = useState(false);
@@ -25,6 +27,7 @@ const GenesetCard = ({
       setGenesetToEdit(response.data);
     } catch (error) {
       console.error("Error fetching geneset by id:", error);
+      setApiError("An error occurred, please try again.");
     }
   };
 
@@ -34,6 +37,7 @@ const GenesetCard = ({
         await axios.put(`/genesets/${genesetToEdit.id}`, newGeneset);
       } catch (error) {
         console.error("Error fetching geneset by id:", error);
+        setApiError("An error occurred, please try again.");
       }
     }
   };

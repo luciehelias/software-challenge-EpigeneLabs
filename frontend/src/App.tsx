@@ -9,6 +9,7 @@ const App = () => {
   const [genesets, setGenesets] = useState<GenesetList>([]);
   const [loading, setLoading] = useState(true);
   const [showModal, setShowModal] = useState(false);
+  const [apiError, setApiError] = useState<string>("");
 
   // use UseCallback to memorize the function
   const fetchGenesets = useCallback(async () => {
@@ -17,6 +18,7 @@ const App = () => {
       setGenesets(response.data);
     } catch (error) {
       console.error("Error fetching genesets:", error);
+      setApiError("An error occurred, please try again.");
     }
   }, []);
 
@@ -33,6 +35,7 @@ const App = () => {
       fetchGenesets();
     } catch (error) {
       console.error("Error creating geneset:", error);
+      setApiError("An error occurred, please try again.");
     }
   };
 
@@ -63,6 +66,7 @@ const App = () => {
                 key={index}
                 fetchGenesets={fetchGenesets}
                 genesets={genesets}
+                setApiError={setApiError}
               />
             ))}
           </ul>
@@ -72,6 +76,11 @@ const App = () => {
           </p>
         )}
       </div>
+      {apiError && (
+        <div className="text-center text-red-500 font-semibold mb-4">
+          <p>{apiError}</p>
+        </div>
+      )}
       <GenesetModal
         showModal={showModal}
         setShowModal={setShowModal}
