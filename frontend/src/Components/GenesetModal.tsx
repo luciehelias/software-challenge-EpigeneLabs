@@ -32,6 +32,7 @@ const GenesetModal = ({
   const [currentGeneset, setCurrentGeneset] =
     useState<newGeneset>(initialState);
 
+  // to update the UI when the geneset has been modified
   useEffect(() => {
     setCurrentGeneset(initialState);
   }, [genesetToEdit]);

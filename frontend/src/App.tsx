@@ -2,8 +2,8 @@ import axios from "axios";
 import { useCallback, useEffect, useState } from "react";
 import GenesetCard from "./Components/GenesetCard";
 import GenesetModal from "./Components/GenesetModal";
-import { GenesetList, newGeneset } from "./Types/global.types";
 import ActionButton from "./Components/ActionButton";
+import { GenesetList, newGeneset } from "./Types/global.types";
 
 const App = () => {
   const [genesets, setGenesets] = useState<GenesetList>([]);
@@ -24,7 +24,7 @@ const App = () => {
   useEffect(() => {
     fetchGenesets();
     setLoading(false);
-  }, [fetchGenesets]);
+  }, []);
 
   // post a new geneset in the API
   const handleCreateGeneset = async (newGeneset: newGeneset) => {
@@ -39,9 +39,7 @@ const App = () => {
   if (loading) {
     return (
       <div>
-        <p className="text-center text-lg text-gray-500">
-          Chargement des données...
-        </p>
+        <p className="text-center text-lg text-gray-500">Loading data...</p>
       </div>
     );
   }

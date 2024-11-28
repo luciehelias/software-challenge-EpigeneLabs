@@ -11,7 +11,6 @@ type GenesetCardProps = {
 
 const GenesetCard = ({ geneset, fetchGenesets }: GenesetCardProps) => {
   const [genesetToEdit, setGenesetToEdit] = useState<Geneset>();
-  console.log(genesetToEdit);
   const [showModal, setShowModal] = useState(false);
 
   // get one specific geneset by its ID
