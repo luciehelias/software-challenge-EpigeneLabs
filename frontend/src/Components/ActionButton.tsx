@@ -9,9 +9,9 @@ const ActionButton = ({ text, variant, onClick }: ActionButtonProps) => {
 
   let buttonVariantClass;
   if (variant === "submit") {
-    buttonVariantClass = "bg-violet-700";
+    buttonVariantClass = "bg-violet";
   } else if (variant === "showModal") {
-    buttonVariantClass = "bg-teal-700 mb-8 text-xl";
+    buttonVariantClass = "bg-light-green text-black font-semibold mb-8 text-xl";
   } else if (variant === "cancel" || variant === "update") {
     buttonVariantClass = "bg-gray-800";
   }

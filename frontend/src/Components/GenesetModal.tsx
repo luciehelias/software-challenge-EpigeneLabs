@@ -99,7 +99,7 @@ const GenesetModal = ({
       {showModal && (
         <div className="fixed inset-0 bg-gray-700 bg-opacity-60 flex justify-center items-center ">
           <div className="bg-white p-8 rounded-lg shadow-lg w-full md:w-1/2 lg:w-1/3">
-            <h2 className="text-3xl text-center text-violet-700 mb-6 ">
+            <h2 className="text-3xl text-center text-violet font-semibold mb-6 ">
               {genesetToEdit ? "Update Geneset" : "Create a new geneset"}
             </h2>
             <div className="mb-4">
